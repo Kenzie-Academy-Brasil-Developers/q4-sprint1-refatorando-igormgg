@@ -1,13 +1,13 @@
-import express from "express";
-import { v4 as uuidv4 } from "uuid";
-import jwt from "jsonwebtoken";
-import * as yup from "yup";
-import bcrypt from "bcryptjs";
+import express from 'express';
+import { v4 as uuidv4 } from 'uuid';
+import jwt from 'jsonwebtoken';
+import * as yup from 'yup';
+import bcrypt from 'bcryptjs';
 
 const port = 3000;
 const config = {
-  secret: "the_greatest_secret_key",
-  expiresIn: "604800",
+  secret: 'the_greatest_secret_key',
+  expiresIn: '604800',
 };
 
 let app = express();
@@ -21,7 +21,7 @@ const verifyDuplicateCnpj = (req, res, next) => {
   let company = companies.find((company) => company.cnpj == cnpj);
 
   if (company) {
-    return res.status(400).json({ message: "CNPJ already registered" });
+    return res.status(400).json({ message: 'CNPJ already registered' });
   }
 
   return next();
@@ -35,7 +35,7 @@ const verifyDuplicateVehiclePlate = (req, res, next) => {
   );
 
   if (vehicle) {
-    return res.status(400).json({ message: "Vehicle already registered" });
+    return res.status(400).json({ message: 'Vehicle already registered' });
   }
 
   return next();
@@ -47,7 +47,7 @@ const verifyCompanyExistence = (req, res, next) => {
   let company = companies.find((company) => company.cnpj == cnpj);
 
   if (!company) {
-    return res.status(400).json({ message: "Company not registered" });
+    return res.status(400).json({ message: 'Company not registered' });
   }
 
   req.company = company;
@@ -63,7 +63,7 @@ const verifyVehicleExistence = (req, res, next) => {
   );
 
   if (!vehicle) {
-    return res.status(400).json({ message: "Vehicle not registered" });
+    return res.status(400).json({ message: 'Vehicle not registered' });
   }
 
   req.vehicle = vehicle;
@@ -73,15 +73,15 @@ const verifyVehicleExistence = (req, res, next) => {
 
 const authenticateCompany = (req, res, next) => {
   if (!req.headers.authorization) {
-    return res.status(401).json({ message: "Missing authorization" });
+    return res.status(401).json({ message: 'Missing authorization' });
   }
 
-  let token = req.headers.authorization.split(" ")[1];
+  let token = req.headers.authorization.split(' ')[1];
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
       console.log(err);
-      return res.status(401).json({ message: "Invalid Token." });
+      return res.status(401).json({ message: 'Invalid Token.' });
     } else {
       return next();
     }
@@ -90,48 +90,48 @@ const authenticateCompany = (req, res, next) => {
 
 const companySchema = yup.object().shape({
   name: yup
-    .string("Formato de nome invalido")
-    .required("Campo de name obrigátorio"),
+    .string('Formato de nome invalido')
+    .required('Campo de name obrigátorio'),
   cnpj: yup
-    .string("Formato de cnpj invalido")
+    .string('Formato de cnpj invalido')
     .matches(/^[0-9]{14}$/)
-    .required("Campo de cnpj obrigátorio"),
+    .required('Campo de cnpj obrigátorio'),
   password: yup
-    .string("Formato de senha invalido")
-    .required("Campo de senha obrigátorio"),
+    .string('Formato de senha invalido')
+    .required('Campo de senha obrigátorio'),
   cep: yup
-    .string("Formato de cep invalido")
-    .required("Campo de cep obrigátorio"),
+    .string('Formato de cep invalido')
+    .required('Campo de cep obrigátorio'),
   address: yup
-    .string("Formato de endereço invalido")
-    .required("Campo de endereço obrigátorio"),
+    .string('Formato de endereço invalido')
+    .required('Campo de endereço obrigátorio'),
   number: yup
-    .number("Formato de número invalido")
-    .required("Campo de número obrigátorio")
-    .positive("Formato de número invalido")
-    .integer("Formato de número invalido"),
+    .number('Formato de número invalido')
+    .required('Campo de número obrigátorio')
+    .positive('Formato de número invalido')
+    .integer('Formato de número invalido'),
   state: yup
-    .string("Formato de estado invalido")
+    .string('Formato de estado invalido')
     .matches(/^[A-Z]{2}$/)
-    .required("Campo de estado obrigátorio"),
+    .required('Campo de estado obrigátorio'),
   city: yup
-    .string("Formato de cidade invalido")
-    .required("Campo de cidade obrigátorio"),
+    .string('Formato de cidade invalido')
+    .required('Campo de cidade obrigátorio'),
 });
 
 const vehicleSchema = yup.object().shape({
   model: yup
-    .string("Formato de modelo invalido")
-    .required("Campo de modelo obrigátorio"),
+    .string('Formato de modelo invalido')
+    .required('Campo de modelo obrigátorio'),
   brand: yup
-    .string("Formato de marca invalida")
-    .required("Campo de marca obrigátorio"),
+    .string('Formato de marca invalida')
+    .required('Campo de marca obrigátorio'),
   year: yup
-    .number("Formato de ano invalido")
-    .required("Campo de ano obrigátorio"),
+    .number('Formato de ano invalido')
+    .required('Campo de ano obrigátorio'),
   plate: yup
-    .string("Formato de placa invalido")
-    .required("Campo de placa obrigátorio"),
+    .string('Formato de placa invalido')
+    .required('Campo de placa obrigátorio'),
 });
 
 const validate = (schema) => async (req, res, next) => {
@@ -141,17 +141,17 @@ const validate = (schema) => async (req, res, next) => {
     next();
   } catch (e) {
     console.error(e);
-    res.status(400).json({ error: e.errors.join(", ") });
+    res.status(400).json({ error: e.errors.join(', ') });
   }
 };
 
 app.post(
-  "/companies/register",
+  '/companies/register',
   validate(companySchema),
   verifyDuplicateCnpj,
   async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    
+
     let company = {
       ...req.body,
       id: uuidv4(),
@@ -161,11 +161,11 @@ app.post(
 
     companies.push(company);
 
-    res.status(201).json({ message: "Company successfully created", company });
+    res.status(201).json({ message: 'Company successfully created', company });
   }
 );
 
-app.post("/companies/login", async (req, res) => {
+app.post('/companies/login', async (req, res) => {
   const { cnpj, password } = req.body;
 
   let company = companies.find((company) => company.cnpj === cnpj);
@@ -173,10 +173,10 @@ app.post("/companies/login", async (req, res) => {
   const match = await bcrypt.compare(password, company.password);
 
   if (!company) {
-    return res.status(401).json({ message: "Company not found" });
+    return res.status(401).json({ message: 'Company not found' });
   }
   if (!match) {
-    return res.status(401).json({ message: "User and password missmatch." });
+    return res.status(401).json({ message: 'User and password missmatch.' });
   }
 
   let token = jwt.sign({ cnpj: cnpj }, config.secret, {
@@ -186,12 +186,12 @@ app.post("/companies/login", async (req, res) => {
   res.status(200).json({ token, company });
 });
 
-app.get("/companies", (req, res) => {
+app.get('/companies', (req, res) => {
   res.status(200).json(companies);
 });
 
 app.put(
-  "/companies/:cnpj",
+  '/companies/:cnpj',
   authenticateCompany,
   verifyCompanyExistence,
   (req, res) => {
@@ -202,12 +202,12 @@ app.put(
 
     companies[index] = updatedCompany;
 
-    res.status(200).json({ messagem: "Company updated", companies });
+    res.status(200).json({ messagem: 'Company updated', companies });
   }
 );
 
 app.delete(
-  "/companies/:cnpj",
+  '/companies/:cnpj',
   authenticateCompany,
   verifyCompanyExistence,
   (req, res) => {
@@ -215,12 +215,12 @@ app.delete(
 
     companies = companies.filter((company) => company.cnpj !== cnpj);
 
-    res.status(200).json({ messagem: "Company deleted", companies });
+    res.status(200).json({ messagem: 'Company deleted', companies });
   }
 );
 
 app.post(
-  "/companies/:cnpj/vehicles",
+  '/companies/:cnpj/vehicles',
   authenticateCompany,
   verifyCompanyExistence,
   verifyDuplicateVehiclePlate,
@@ -244,7 +244,7 @@ app.post(
 );
 
 app.get(
-  "/companies/:cnpj/vehicles",
+  '/companies/:cnpj/vehicles',
   authenticateCompany,
   verifyCompanyExistence,
   (req, res) => {
@@ -253,7 +253,7 @@ app.get(
 );
 
 app.put(
-  "/companies/:cnpj/vehicles/:plate",
+  '/companies/:cnpj/vehicles/:plate',
   authenticateCompany,
   verifyCompanyExistence,
   verifyVehicleExistence,
@@ -268,12 +268,12 @@ app.put(
 
     res
       .status(200)
-      .json({ message: "Vehicle updated", vehicle: updatedVehicle });
+      .json({ message: 'Vehicle updated', vehicle: updatedVehicle });
   }
 );
 
 app.delete(
-  "/companies/:cnpj/vehicles/:plate",
+  '/companies/:cnpj/vehicles/:plate',
   authenticateCompany,
   verifyCompanyExistence,
   verifyVehicleExistence,
@@ -288,10 +288,10 @@ app.delete(
 
     res
       .status(200)
-      .json({ messagem: "Vehicle deleted", vehicles: company.vehicles });
+      .json({ messagem: 'Vehicle deleted', vehicles: company.vehicles });
   }
 );
 
 app.listen(port, () => {
-  console.log("App running");
+  console.log('App running');
 });
