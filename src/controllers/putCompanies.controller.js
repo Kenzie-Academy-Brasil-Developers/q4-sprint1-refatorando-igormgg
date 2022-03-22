@@ -1,4 +1,4 @@
-import { companies } from '../app';
+import { companies } from '../configs';
 
 const putCompaniesController = (req, res) => {
   let { company } = req;

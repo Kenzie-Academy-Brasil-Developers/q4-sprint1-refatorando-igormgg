@@ -1,6 +1,8 @@
-import { describe, expect, it } from '@jest/globals';
+import app from '../app';
 import request from 'supertest';
-import app, { companies } from '../app';
+
+import { companies } from '../configs';
+import { describe, expect, it } from '@jest/globals';
 
 describe('Get Companies Test', () => {
   it('Should get all companies registered', async () => {

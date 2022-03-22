@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
-import { companies } from '../app';
+import { companies } from '../configs';
 
 const companiesRegisterController = async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);

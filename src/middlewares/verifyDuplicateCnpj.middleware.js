@@ -1,4 +1,4 @@
-import { companies } from '../app';
+import { companies } from '../configs';
 
 const verifyDuplicateCnpj = (req, res, next) => {
   let { cnpj } = req.body;

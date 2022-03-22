@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-import { companies, config } from '../app';
+import { companies, config } from '../configs';
 
 const companiesLoginController = async (req, res) => {
   const { cnpj, password } = req.body;

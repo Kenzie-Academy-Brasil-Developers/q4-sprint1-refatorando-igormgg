@@ -1,4 +1,4 @@
-import { companies } from '../app';
+import { companies } from '../configs';
 
 const verifyDuplicateVehiclePlate = (req, res, next) => {
   let { plate } = req.body;

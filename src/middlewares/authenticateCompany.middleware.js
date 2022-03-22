@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { config } from '../app';
+import { config } from '../configs';
 
 const authenticateCompany = (req, res, next) => {
   if (!req.headers.authorization) {
