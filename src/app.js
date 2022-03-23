@@ -7,6 +7,6 @@ let app = express();
 app.use(express.json());
 app.use('/companies', router);
 
-// expressListRoutes(app);
+expressListRoutes(app);
 
 export default app;
